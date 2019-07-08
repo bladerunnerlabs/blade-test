@@ -87,7 +87,7 @@ class BladeTest
     begin
       puts 'Running ' + stage.yellow
     rescue
-      return false
+      stage_result = false
     end
 
     print_result(stage_result)
