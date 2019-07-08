@@ -7,8 +7,8 @@ Sample configuration file located in https://github.com/bladerunnerlabs/blade-te
 
 ## Running btest
 
-btest.rb <configuration file>
+`btest.rb <configuration file>`
 
 or create .btest.yaml in the directory where your are going to execute btest and run
 
-btest.rb
+`btest.rb`
