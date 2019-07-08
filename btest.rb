@@ -90,9 +90,18 @@ private
   end
 
   def run_execution(stage_name, commands)
+    command_numbers = 1
     puts 'Running ' + stage_name.yellow
 
+    if commands.nil?
+      puts 'SKIPPING'.yellow
+      puts
+      return
+    end
+
     commands.each { |command|
+      puts "#{command_numbers}: Executing: #{command.yellow}"
+      command_numbers = command_numbers + 1
       result = system(command)
       if result.nil?
         raise TestStepException,
