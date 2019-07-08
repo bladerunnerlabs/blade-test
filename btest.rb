@@ -2,6 +2,7 @@
 # frozen_string_literal: true
 
 require 'yaml'
+require 'colorize'
 
 BLADE_TEST_VERSION = '0.1'
 
@@ -9,7 +10,7 @@ BLADE_TEST_VERSION = '0.1'
 class BladeTest
   def initialize(config_file)
     @config = YAML.load_file(config_file)
-
+    @result = true
     dump_config
   end
 
@@ -51,11 +52,21 @@ class BladeTest
     print_description
   end
 
+  def final_result
+    if @result == true
+      puts 'PASS'.green
+    else
+      puts 'FAIL'.red
+    end
+  end
+
   def run_flow
     run_pretest
     run_test_case
     run_post_set
     run_analyze_results
+
+    final_result
   end
 end
 
