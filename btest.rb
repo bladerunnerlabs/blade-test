@@ -18,8 +18,11 @@ end
 
 # BladeTest - test framework implementation
 class BladeTest
-  BLADE_TEST_VERSION = '0.1'
+  BTEST_VERSION = '0.1'
   BTEST_DEFAULT_CFG_FILE = '.btest.yaml'
+  BTEST_DEFAULT_CONFIG = { "Name" => "Test name not provided",
+                            "Description" => "do something unknown"
+                          }
 
   def self.config_file
     config_file = BTEST_DEFAULT_CFG_FILE if File.exist?(BTEST_DEFAULT_CFG_FILE)
@@ -35,20 +38,21 @@ class BladeTest
 
   def initialize(config_file)
     @config_file = config_file
-    @config = YAML.load_file(@config_file)
+    @config = BTEST_DEFAULT_CONFIG.merge(YAML.load_file(@config_file))
     @result = true
   end
 
   def run
-    print_welcome_and_info
     dump_config
+    print_welcome_and_info
     run_flow
   end
 
+private
+
   def print_description
-    test_name = " tet name "# @config['Description']
-    test_description = 'demonstrate how the test framework yaml files should '\
-    'be defined'
+    test_name = @config['Name']
+    test_description = @config['Description']
     puts 'Running test ' + test_name.yellow
     puts 'The test will ' + test_description
     puts
@@ -70,8 +74,6 @@ class BladeTest
   def run_analyze_results
     run_execution('AnalyzeResults')
   end
-
-  private
 
   def print_result(result)
     if result == true
@@ -101,7 +103,7 @@ class BladeTest
   end
 
   def print_welcome_and_info
-    puts "Blade test v#{BLADE_TEST_VERSION}\n\n"
+    puts "Blade test v#{BTEST_VERSION}\n\n"
     print_description
   end
 
@@ -128,6 +130,6 @@ end
 begin
   test = BladeTest.new(BladeTest.config_file)
   test.run
-rescue => e
+rescue ConfigFileException => e
   puts e.to_s.red
 end

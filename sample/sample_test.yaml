@@ -1,8 +1,7 @@
-- Description:
-  Name: Sample test
-  Description: demonstrate how the test framework yaml files should be defined
+Name: Sample test
+Description: demonstrate how the test framework yaml files should be defined
 
-- TestCase:
+TestSteps:
   - PreTest:
       Execute:
         - ls > pre_log.txt
