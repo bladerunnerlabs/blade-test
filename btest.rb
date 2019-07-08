@@ -108,7 +108,7 @@ private
     execution_list = step_config[step_config.keys.first]["Execute"]
 
     times = 1 if times.nil?
-    puts "Running #{step_name} step #{times} times.."
+    puts "Running #{step_name} step #{times} times..."
     times.times {run_execution(step_name, execution_list)}
   end
 
