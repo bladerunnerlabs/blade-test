@@ -1,0 +1,22 @@
+- Description:
+  Name: Sample test
+  Description: Demonstrates how the test framwork yaml files should be defined
+
+- TestCase:
+  - PreTest:
+      Execute:
+        - ls > pre_log.txt
+  - Test:
+      Times: 5
+      Execute:
+        - ls
+        - whoami
+  - PostTest:
+      Execute:
+        - ls > post_log.txt
+  - AnalyzeResults:
+      Execute:
+        - diff pre_log.txt pre_log.txt
+
+
+
