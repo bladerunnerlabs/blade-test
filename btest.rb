@@ -3,6 +3,7 @@
 
 require 'yaml'
 require 'colorize'
+require 'English'
 
 # ConfigFileException - exception class for configuration file
 class ConfigFileException < StandardError
@@ -16,6 +17,7 @@ class ConfigFileException < StandardError
   end
 end
 
+# TestStepException - exception class for test stage execution list failures
 class TestStepException < StandardError
   def initialize(msg = 'Test step failed')
     super
@@ -26,9 +28,8 @@ end
 class BladeTest
   BTEST_VERSION = '0.1'
   BTEST_DEFAULT_CFG_FILE = '.btest.yaml'
-  BTEST_DEFAULT_CONFIG = { "Name" => "Test name not provided",
-                            "Description" => "do something unknown"
-                          }
+  BTEST_DEFAULT_CONFIG = { 'Name' => 'Test name not provided',
+                           'Description' => 'do something unknown' }.freeze
 
   def self.config_file
     config_file = BTEST_DEFAULT_CFG_FILE if File.exist?(BTEST_DEFAULT_CFG_FILE)
@@ -54,7 +55,7 @@ class BladeTest
     run_flow
   end
 
-private
+  private
 
   def print_description
     test_name = @config['Name']
@@ -99,28 +100,28 @@ private
       return
     end
 
-    commands.each { |command|
+    commands.each do |command|
       puts "#{command_numbers}: Executing: #{command.yellow}"
-      command_numbers = command_numbers + 1
+      command_numbers += 1
       result = system(command)
       if result.nil?
         raise TestStepException,
-          "Stage #{stage_name}, command #{command} not found"
+              "Stage #{stage_name}, command #{command} not found"
       end
 
       if result == false
         raise TestStepException,
-          "Stage #{stage_name}, command #{command} failed: #{$?}"
+              "Stage #{stage_name}, command #{command} failed: #{$CHILD_STATUS}"
       end
-    }
+    end
 
     print_result(true)
   end
 
   def run_step(step_config)
     step_name = step_config.keys.first
-    times = step_config[step_config.keys.first]["Times"]
-    execution_list = step_config[step_config.keys.first]["Execute"]
+    times = step_config[step_config.keys.first]['Times']
+    execution_list = step_config[step_config.keys.first]['Execute']
 
     times = 1 if times.nil?
     puts "Running #{step_name} step #{times} times..."
@@ -140,12 +141,7 @@ private
 
   def run_flow
     test_steps = @config['TestSteps']
-    test_steps.each do |step|
-      if !run_step(step)
-        break
-      end
-    end
-
+    test_steps.each { |step| break unless run_step(step) }
     print_final_result
   end
 end
