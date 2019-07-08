@@ -16,6 +16,12 @@ class ConfigFileException < StandardError
   end
 end
 
+class TestStepException < StandardError
+  def initialize(msg = 'Test step failed')
+    super
+  end
+end
+
 # BladeTest - test framework implementation
 class BladeTest
   BTEST_VERSION = '0.1'
@@ -58,42 +64,12 @@ private
     puts
   end
 
-  def run_pretest
-    run_execution('PreTest')
-  end
-
-  def run_test_case
-    # @config.times.times { run_execution('Test') }
-    run_execution('Test')
-  end
-
-  def run_post_set
-    run_execution('PostTest')
-  end
-
-  def run_analyze_results
-    run_execution('AnalyzeResults')
-  end
-
   def print_result(result)
     if result == true
       puts 'PASS'.green
     else
       puts 'FAIL'.red
     end
-  end
-
-  def run_execution(stage)
-    stage_result = true
-
-    begin
-      puts 'Running ' + stage.yellow
-    rescue
-      stage_result = false
-    end
-
-    print_result(stage_result)
-    stage_result
   end
 
   def dump_config
@@ -113,13 +89,34 @@ private
     puts "\n\n"
   end
 
+  def run_execution(stage, commands)
+    stage_result = true
+
+    begin
+      puts 'Running ' + stage.yellow
+    rescue
+      stage_result = false
+    end
+
+    print_result(stage_result)
+    stage_result
+  end
+
+  def run_step(step_config)
+    step_name = step_config.keys.first
+    times = step_config[step_config.keys.first]["Times"]
+    execution_list = step_config[step_config.keys.first]["Execute"]
+
+    times = 1 if times.nil?
+    puts "Running #{step_name} step #{times} times.."
+    times.times {run_execution(step_name, execution_list)}
+  end
+
   def run_flow
     begin
-      run_pretest
-      run_test_case
-      run_post_set
-      run_analyze_results
-    rescue
+      test_steps = @config['TestSteps']
+      test_steps.each { |step| run_step(step) }
+    rescue TestStepException => e
       @result = false
     end
 
