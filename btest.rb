@@ -11,16 +11,20 @@ class BladeTest
   def initialize(config_file)
     @config = YAML.load_file(config_file)
     @result = true
-    dump_config
   end
 
   def run
     print_welcome_and_info
+    dump_config
     run_flow
   end
 
   def print_description
-    puts 'Running btest...'
+    test_name = 'sample_test'
+    test_description = 'demonstrate how the test framework yaml files should be defined'
+    puts 'Running test ' + test_name.yellow
+    puts 'The test will ' + test_description
+    puts
   end
 
   def run_pretest
@@ -44,11 +48,13 @@ class BladeTest
   def run_execution(stage) end
 
   def dump_config
-    puts @config
+    puts 'Current configuration:'
+    puts @config.to_s.yellow
+    puts
   end
 
   def print_welcome_and_info
-    puts "Blade test v#{BLADE_TEST_VERSION}"
+    puts "Blade test v#{BLADE_TEST_VERSION}\n\n"
     print_description
   end
 
@@ -58,6 +64,7 @@ class BladeTest
     else
       puts 'FAIL'.red
     end
+    puts "\n\n"
   end
 
   def run_flow
