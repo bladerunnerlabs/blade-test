@@ -90,31 +90,45 @@ class BladeTest
     print_result(@result)
   end
 
-  def run_execution(stage_name, commands)
-    command_numbers = 1
-    puts 'Running ' + stage_name.yellow
-
+  def skip_execution(commands)
     if commands.nil?
       puts 'SKIPPING'.yellow
       puts
-      return
+      return true
     end
 
+    false
+  end
+
+  def command_execution_error(stage_name, command, result)
+    if result.nil?
+      raise TestStepException,
+            "Stage #{stage_name}, command #{command} not found"
+    end
+
+    unless result
+      raise TestStepException,
+            "Stage #{stage_name}," \
+            "command #{command} failed: #{$CHILD_STATUS}"
+    end
+  end
+
+  def run_commands(stage_name, commands)
+    command_numbers = 1
     commands.each do |command|
       puts "#{command_numbers}: Executing: #{command.yellow}"
       command_numbers += 1
+
       result = system(command)
-      if result.nil?
-        raise TestStepException,
-              "Stage #{stage_name}, command #{command} not found"
-      end
-
-      if result == false
-        raise TestStepException,
-              "Stage #{stage_name}, command #{command} failed: #{$CHILD_STATUS}"
-      end
+      command_execution_error(stage_name, command, result)
     end
+  end
 
+  def run_execution(stage_name, commands)
+    puts 'Running ' + stage_name.yellow
+    return if skip_execution(commands)
+
+    run_commands(stage_name, commands)
     print_result(true)
   end
 
