@@ -70,6 +70,7 @@ private
     else
       puts 'FAIL'.red
     end
+    puts
   end
 
   def dump_config
@@ -86,20 +87,25 @@ private
   def print_final_result
     puts 'Final result:'
     print_result(@result)
-    puts "\n\n"
   end
 
-  def run_execution(stage, commands)
-    stage_result = true
+  def run_execution(stage_name, commands)
+    puts 'Running ' + stage_name.yellow
 
-    begin
-      puts 'Running ' + stage.yellow
-    rescue
-      stage_result = false
-    end
+    commands.each { |command|
+      result = system(command)
+      if result.nil?
+        raise TestStepException,
+          "Stage #{stage_name}, command #{command} not found"
+      end
 
-    print_result(stage_result)
-    stage_result
+      if result == false
+        raise TestStepException,
+          "Stage #{stage_name}, command #{command} failed: #{$?}"
+      end
+    }
+
+    print_result(true)
   end
 
   def run_step(step_config)
@@ -109,15 +115,26 @@ private
 
     times = 1 if times.nil?
     puts "Running #{step_name} step #{times} times..."
-    times.times {run_execution(step_name, execution_list)}
+    times.times do
+      begin
+        run_execution(step_name, execution_list)
+      rescue TestStepException => e
+        puts e
+        print_result(false)
+        @result = false
+        return false
+      end
+    end
+
+    true
   end
 
   def run_flow
-    begin
-      test_steps = @config['TestSteps']
-      test_steps.each { |step| run_step(step) }
-    rescue TestStepException => e
-      @result = false
+    test_steps = @config['TestSteps']
+    test_steps.each do |step|
+      if !run_step(step)
+        break
+      end
     end
 
     print_final_result
