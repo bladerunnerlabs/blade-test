@@ -1,6 +1,6 @@
 - Description:
   Name: Sample test
-  Description: Demonstrates how the test framwork yaml files should be defined
+  Description: demonstrate how the test framework yaml files should be defined
 
 - TestCase:
   - PreTest:
