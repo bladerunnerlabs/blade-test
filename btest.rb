@@ -14,18 +14,6 @@ class BladeTest
   BTEST_DEFAULT_CONFIG = { 'Name' => 'Test name not provided',
                            'Description' => 'do something unknown' }.freeze
 
-  def self.config_file
-    config_file = BTEST_DEFAULT_CFG_FILE if File.exist?(BTEST_DEFAULT_CFG_FILE)
-
-    if ARGV.length >= 1
-      config_file = ARGV[0] if File.exist?(ARGV[0])
-    end
-
-    raise ConfigFileException if config_file.nil?
-
-    config_file
-  end
-
   def initialize(config_file)
     @config_file = config_file
     @config = BTEST_DEFAULT_CONFIG.merge(YAML.load_file(@config_file))
@@ -88,7 +76,9 @@ class BladeTest
 end
 
 begin
-  test = BladeTest.new(BladeTest.config_file)
+  test = BladeTest.new(
+    BTestConfigFile.config_file(BladeTest::BTEST_DEFAULT_CFG_FILE)
+  )
   exit(test.run)
 rescue ConfigFileException => e
   puts e.to_s.red
