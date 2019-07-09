@@ -14,10 +14,35 @@ class BladeTestList
 
   def initialize(config_file)
     @config_file = config_file
+    @config = YAML.load_file(@config_file)
   end
 
   def run
+    print_description
+    run_list
     true
+  end
+
+  private
+
+  def run_list
+    tests = @config['Tests']
+    puts tests
+
+    tests.each do |test|
+      command = './btest.rb ' + test
+      puts "Executing: #{command.yellow}"
+
+      result = system(command)
+    end
+  end
+
+  def print_description
+    test_name = @config['Name']
+    test_description = @config['Description']
+    puts 'Running test list ' + test_name.yellow
+    puts 'The tests will ' + test_description
+    puts
   end
 end
 
