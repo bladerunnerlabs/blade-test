@@ -53,6 +53,7 @@ class BladeTest
     dump_config
     print_welcome_and_info
     run_flow
+    @result
   end
 
   private
@@ -167,7 +168,8 @@ end
 
 begin
   test = BladeTest.new(BladeTest.config_file)
-  test.run
+  exit(test.run)
 rescue ConfigFileException => e
   puts e.to_s.red
+  exit(false)
 end
