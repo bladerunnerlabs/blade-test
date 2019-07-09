@@ -4,8 +4,8 @@
 require 'yaml'
 require 'colorize'
 require 'English'
+require_relative 'config.rb'
 require_relative 'step.rb'
-require_relative 'config_file.rb'
 
 # BladeTest - test framework implementation
 class BladeTest
@@ -77,7 +77,7 @@ end
 
 begin
   test = BladeTest.new(
-    BTestConfigFile.config_file(BladeTest::BTEST_DEFAULT_CFG_FILE)
+    BTestConfig.config_file(BladeTest::BTEST_DEFAULT_CFG_FILE)
   )
   exit(test.run)
 rescue ConfigFileException => e

@@ -12,8 +12,8 @@ class ConfigFileException < StandardError
   end
 end
 
-# BTestConfigFile - class to handle config files
-class BTestConfigFile
+# BTestConfigFile - class to handle configuration
+class BTestConfig
   def self.config_file(default_file)
     config_file = default_file if File.exist?(default_file)
 
