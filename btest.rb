@@ -9,7 +9,6 @@ require_relative 'step.rb'
 
 # BladeTest - test framework implementation
 class BladeTest
-  BTEST_VERSION = '0.1'
   BTEST_DEFAULT_CFG_FILE = '.btest.yaml'
   BTES_CONFIG_FILE_MSG = %(
     Configuration file not found.
@@ -57,7 +56,7 @@ class BladeTest
   end
 
   def print_welcome_and_info
-    puts "Blade test v#{BTEST_VERSION}\n\n"
+    puts "Blade test v#{BTestConfig.version}\n\n"
     print_description
   end
 

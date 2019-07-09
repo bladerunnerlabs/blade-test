@@ -9,6 +9,8 @@ end
 
 # BTestConfigFile - class to handle configuration
 class BTestConfig
+  BTEST_VERSION = '0.1'
+
   def self.config_file(msg, default_file = '')
     config_file = default_file if File.exist?(default_file)
 
@@ -19,5 +21,9 @@ class BTestConfig
     raise ConfigFileException, msg if config_file.nil?
 
     config_file
+  end
+
+  def self.version
+    BTEST_VERSION
   end
 end
