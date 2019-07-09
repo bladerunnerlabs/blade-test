@@ -11,6 +11,11 @@ require_relative 'step.rb'
 class BladeTest
   BTEST_VERSION = '0.1'
   BTEST_DEFAULT_CFG_FILE = '.btest.yaml'
+  BTES_CONFIG_FILE_MSG = %(
+    Configuration file not found.
+    Please provide configuration file as a parameter to btest
+    or create default configuration file ".btest.yaml".
+  )
   BTEST_DEFAULT_CONFIG = { 'Name' => 'Test name not provided',
                            'Description' => 'do something unknown' }.freeze
 
@@ -77,7 +82,8 @@ end
 
 begin
   test = BladeTest.new(
-    BTestConfig.config_file(BladeTest::BTEST_DEFAULT_CFG_FILE)
+    BTestConfig.config_file(BladeTest::BTES_CONFIG_FILE_MSG,
+                            BladeTest::BTEST_DEFAULT_CFG_FILE)
   )
   exit(test.run)
 rescue ConfigFileException => e
