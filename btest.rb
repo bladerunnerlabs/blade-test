@@ -5,18 +5,7 @@ require 'yaml'
 require 'colorize'
 require 'English'
 require_relative 'step.rb'
-
-# ConfigFileException - exception class for configuration file
-class ConfigFileException < StandardError
-  CONFIG_FILE_ERROR = %(
-    Configuration file not found.
-    Please provide configuration file as a parameter to btest
-    or create default configuration file ".btest.yaml".
-  )
-  def initialize(msg = CONFIG_FILE_ERROR)
-    super
-  end
-end
+require_relative 'config_file.rb'
 
 # BladeTest - test framework implementation
 class BladeTest
