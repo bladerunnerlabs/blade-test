@@ -53,7 +53,7 @@ class ExecutionList
     unless result
       raise TestStepException,
             "Stage #{@stage_name}," \
-            "command #{command} failed: #{$CHILD_STATUS}" unless result
+            "command #{command} failed: #{$CHILD_STATUS}"
     end
   end
 end
