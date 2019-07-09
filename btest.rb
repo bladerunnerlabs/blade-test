@@ -71,7 +71,6 @@ class BladeTest
     else
       puts 'FAIL'.red
     end
-    puts
   end
 
   def dump_config
@@ -124,12 +123,16 @@ class BladeTest
     end
   end
 
+  def print_total_stage_time(step_name, start_time, end_time)
+    puts "#{step_name} total time is: " + (end_time-start_time).to_s.yellow
+    puts
+    puts
+  end
+
   def run_execution(stage_name, commands)
     puts 'Running ' + stage_name.yellow
     return if skip_execution(commands)
-
     run_commands(stage_name, commands)
-    print_result(true)
   end
 
   def run_step(step_config)
@@ -139,9 +142,11 @@ class BladeTest
 
     times = 1 if times.nil?
     puts "Running #{step_name} step #{times} times..."
+    step_start_time = Time.now.to_f
     times.times do
       begin
         run_execution(step_name, execution_list)
+        print_result(true)
       rescue TestStepException => e
         puts e
         print_result(false)
@@ -149,7 +154,7 @@ class BladeTest
         return false
       end
     end
-
+    print_total_stage_time(step_name, step_start_time, Time.now.to_f)
     true
   end
 
