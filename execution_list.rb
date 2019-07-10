@@ -50,10 +50,10 @@ class ExecutionList
             "Stage #{@stage_name}, command #{command} not found"
     end
 
-    unless result
-      raise TestStepException,
-            "Stage #{@stage_name}," \
-            "command #{command} failed: #{$CHILD_STATUS}"
-    end
+    return if result
+
+    raise TestStepException,
+          "Stage #{@stage_name}," \
+          "command #{command} failed: #{$CHILD_STATUS}"
   end
 end

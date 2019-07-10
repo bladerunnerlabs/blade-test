@@ -33,7 +33,7 @@ class BladeTestList
       command = './btest.rb ' + test
       puts "Executing: #{command.yellow}"
 
-      result = system(command)
+      system(command)
     end
   end
 

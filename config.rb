@@ -12,7 +12,7 @@ class BTestConfig
   BTEST_VERSION = '0.1'
 
   def self.config_file(msg, default_file = '')
-    if ARGV.length == 0
+    if ARGV.empty?
       config_file = default_file if File.exist?(default_file)
     end
 
