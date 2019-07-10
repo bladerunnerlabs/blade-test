@@ -1,0 +1,8 @@
+Name: List of sample test
+Description: demonstrate how the test framework list of yaml files should be defined
+
+Tests:
+  - ./sample/sample_test.yaml
+  - sample_test01.yaml
+  - sample_test02.yaml
+  - sample_test_folder/sample_test.yaml
